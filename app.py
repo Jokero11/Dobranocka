@@ -134,11 +134,11 @@ os.makedirs(IMAGE_DIR, exist_ok=True)
 
 
 # =============================
-# OPENAI
+# OPENAI — POPRAWIONA SEKCJA
 # =============================
 
 client = OpenAI(
-    api_key="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"
+    api_key=st.secrets["OPENAI_API_KEY"]
 )
 
 
@@ -211,10 +211,12 @@ if uploaded_file and imiona_dzieci and opis_oczami_dziecka and moment_dnia:
         - realna przygoda 
         - decyzje i działanie 
         - wyzwanie lub zagadka 
-        - świat reaguje na bohaterów Styl: 
+        - świat reaguje na bohaterów 
+        Styl: 
         - prosty 
         - dynamiczny 
-        - bez przesłodzenia Zakończenie: 
+        - bez przesłodzenia 
+        Zakończenie: 
         - spokojne 
         - domknięte 
         - bez morału wprost 
