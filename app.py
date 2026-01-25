@@ -11,7 +11,7 @@ import base64
 
 
 # =============================
-# FUNKCJA: TŁO + STYL (NAPRAWIONA)
+# FUNKCJA: TŁO + STYL
 # =============================
 
 def set_magic_bg_for_story_panel(image_file):
@@ -21,7 +21,6 @@ def set_magic_bg_for_story_panel(image_file):
     st.markdown(
         f"""
         <style>
-        /* ===== TŁO ===== */
         .stApp {{
             background-image: url("data:image/png;base64,{b64}");
             background-size: cover;
@@ -35,12 +34,10 @@ def set_magic_bg_for_story_panel(image_file):
             padding: 2rem;
         }}
 
-        /* ===== TEKST ===== */
         h1, h2, h3, p, label {{
             color: white !important;
         }}
 
-        /* ===== FILE UPLOADER ===== */
         section[data-testid="stFileUploader"] {{
             background: white;
             border-radius: 16px;
@@ -52,7 +49,6 @@ def set_magic_bg_for_story_panel(image_file):
             color: black !important;
         }}
 
-        /* ===== INPUTY / TEXTAREA ===== */
         input, textarea {{
             background-color: #ffffff !important;
             color: #000000 !important;
@@ -65,7 +61,6 @@ def set_magic_bg_for_story_panel(image_file):
             color: #666666 !important;
         }}
 
-        /* ===== OPAKOWANIE PRZYCISKU ===== */
         .stButton {{
             background: white;
             border-radius: 16px;
@@ -74,7 +69,6 @@ def set_magic_bg_for_story_panel(image_file):
             margin-top: 1rem;
         }}
 
-        /* ===== PRZYCISK ===== */
         .stButton > button {{
             width: 100% !important;
             background-color: #ffffff !important;
@@ -91,7 +85,6 @@ def set_magic_bg_for_story_panel(image_file):
             background-color: #f0f0f0 !important;
         }}
 
-        /* ===== TEKST ZAWSZE WIDOCZNY ===== */
         .stButton > button,
         .stButton > button span {{
             color: #000000 !important;
@@ -126,7 +119,7 @@ st.write("Przygoda, która dzieje się naprawdę.")
 
 
 # =============================
-# FOLDER
+# FOLDER NA RYSUNKI
 # =============================
 
 IMAGE_DIR = "rysunki"
@@ -134,16 +127,17 @@ os.makedirs(IMAGE_DIR, exist_ok=True)
 
 
 # =============================
-# OPENAI — POPRAWIONA SEKCJA
+# OPENAI — NOWA AUTORYZACJA (PROJECT KEYS)
 # =============================
 
 client = OpenAI(
-    api_key=st.secrets["OPENAI_API_KEY"]
+    api_key=st.secrets["OPENAI_API_KEY"],
+    project=st.secrets["OPENAI_PROJECT_ID"]
 )
 
 
 # =============================
-# FUNKCJA ANALIZY
+# FUNKCJA ANALIZY RYSUNKU
 # =============================
 
 def analyze_child_drawing(image_path):
@@ -151,18 +145,23 @@ def analyze_child_drawing(image_path):
         image_bytes = img.read()
 
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4o",   # model z obsługą obrazów
         messages=[{
             "role": "user",
             "content": [
                 {"type": "text", "text": "Opisz świat z rysunku."},
-                {"type": "image_url",
-                 "image_url": {"url": f"data:image/png;base64,{base64.b64encode(image_bytes).decode()}"}}
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/png;base64,{base64.b64encode(image_bytes).decode()}"
+                    }
+                }
             ]
         }],
         max_tokens=400
     )
-    return response.choices[0].message.content
+
+    return response.choices[0].message["content"]
 
 
 # =============================
@@ -229,4 +228,4 @@ if uploaded_file and imiona_dzieci and opis_oczami_dziecka and moment_dnia:
         )
 
         st.subheader("📖 Bajka na dobranoc")
-        st.write(response.choices[0].message.content)
+        st.write(response.choices[0].message["content"])
