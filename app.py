@@ -161,7 +161,8 @@ def analyze_child_drawing(image_path):
         max_tokens=400
     )
 
-    return response.choices[0].message["content"]
+    return response.choices[0].message.content
+
 
 
 # =============================
@@ -228,4 +229,4 @@ if uploaded_file and imiona_dzieci and opis_oczami_dziecka and moment_dnia:
         )
 
         st.subheader("📖 Bajka na dobranoc")
-        st.write(response.choices[0].message["content"])
+        st.write(response.choices[0].message.content)
