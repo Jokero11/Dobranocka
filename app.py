@@ -145,7 +145,7 @@ def analyze_child_drawing(image_path):
         image_bytes = img.read()
 
     response = client.chat.completions.create(
-        model="gpt-4o",   # model z obsługą obrazów
+        model="gpt-4o",
         messages=[{
             "role": "user",
             "content": [
@@ -162,7 +162,6 @@ def analyze_child_drawing(image_path):
     )
 
     return response.choices[0].message.content
-
 
 
 # =============================
@@ -195,33 +194,65 @@ if uploaded_file and imiona_dzieci and opis_oczami_dziecka and moment_dnia:
         st.markdown("### 🌙 Rozpoczyna się przygoda...")
 
         prompt = f""" 
-        Napisz przygodową bajkę na dobranoc dla dziecka w wieku 5–7 lat. 
-        ZASADY: 
-        - Bajka NIE JEST o rysowaniu ani obrazku. 
-        - Historia dzieje się w świecie z opisu dziecka. 
-        - Opis dziecka ma ABSOLUTNY PRIORYTET. 
-        - Analiza AI służy tylko do uzupełniania szczegółów. 
-        --- 
-        Imię / imiona dzieci: {imiona_dzieci} 
-        ŚWIAT (oczami dziecka – priorytet): {opis_oczami_dziecka} 
-        Dodatkowe szczegóły świata (pomocniczo): {st.session_state.analiza} 
-        Wydarzenie z dnia: {moment_dnia} 
-        --- 
-        Wytyczne fabularne: 
-        - realna przygoda 
-        - decyzje i działanie 
-        - wyzwanie lub zagadka 
-        - świat reaguje na bohaterów 
-        Styl: 
-        - prosty 
-        - dynamiczny 
-        - bez przesłodzenia 
-        Zakończenie: 
-        - spokojne 
-        - domknięte 
-        - bez morału wprost 
-        Długość: 800–1000 słów 
-        """
+Napisz przygodową bajkę na dobranoc dla dziecka w wieku 5–7 lat. 
+
+ZASADY OGÓLNE:
+- Bajka NIE JEST o rysowaniu ani o obrazku. 
+- Historia dzieje się w świecie z opisu dziecka. 
+- Opis dziecka ma ABSOLUTNY PRIORYTET. 
+- Analiza AI służy tylko do uzupełniania szczegółów, nigdy do nadpisywania wizji dziecka. 
+
+---
+DANE WEJŚCIOWE:
+Imię / imiona dzieci: {imiona_dzieci} 
+
+ŚWIAT (oczami dziecka – priorytet):
+{opis_oczami_dziecka} 
+
+Dodatkowe szczegóły świata (pomocniczo):
+{st.session_state.analiza} 
+
+Wydarzenie z dnia:
+{moment_dnia} 
+
+---
+WYTYCZNE FABULARNE:
+- realna przygoda osadzona w świecie dziecka
+- bohaterowie podejmują decyzje i działają
+- pojawia się wyzwanie lub zagadka
+- świat reaguje na działania bohaterów w naturalny sposób
+
+---
+WARSTWA WSPERAJĄCA (SUBTELNA, NIETERAPEUTYCZNA):
+- Bohater nie jest oceniany, diagnozowany ani etykietowany.
+- Bycie cichym, spokojnym lub uważnym jest przedstawione jako coś naturalnego i w pełni akceptowanego.
+- Bohater może więcej słuchać, obserwować i myśleć niż mówić — i jest to jego siła.
+- Odwaga przejawia się w małych, naturalnych krokach, nigdy w presji ani w „przełamywaniu siebie”.
+- Jeśli pojawia się trudny moment, rozwiązanie może być bardzo małe: gest, spojrzenie, jeden krok, ciche słowo lub decyzja wewnętrzna.
+- Nikt nie zawstydza bohatera ani nie zmusza go do mówienia czy działania.
+- Świat i inni bohaterowie reagują z życzliwością i uznaniem.
+- Historia buduje poczucie: „jestem w porządku taki, jaki jestem”.
+- Bohater doświadcza przynależności — jest częścią świata i wydarzeń bez konieczności udowadniania czegokolwiek.
+- Na końcu historii pojawia się jedno spokojne zdanie, które zostawia dziecko z poczuciem, że wszystko jest na swoim miejscu.
+
+---
+STYL:
+- prosty
+- dynamiczny
+- ciepły, ale bez przesłodzenia
+- bez pouczania i bez języka terapeutycznego
+
+---
+ZAKOŃCZENIE:
+- spokojne
+- domknięte
+- dające poczucie bezpieczeństwa i akceptacji
+- bez morału wprost, bez podsumowań „co to znaczy”
+
+---
+DŁUGOŚĆ:
+800–1000 słów
+"""
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
